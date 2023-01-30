@@ -1,4 +1,4 @@
-import client from "../src/database";
+import client from "../src/database/database";
 
 async function main() {
     let raceTable = await client.races.findFirst();
