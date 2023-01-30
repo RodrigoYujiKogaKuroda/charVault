@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Races {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Characters  Characters[]
+}
+
+model Backgrounds {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Characters  Characters[]
+}
+
+model Classes {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Subclasses  Subclasses[]
+}
+
+model Subclasses {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  class_id    Int           @unique
+  Classes     Classes       @relation(fields: [class_id], references: [id])
+  Characters  Characters[]
+}
+
+model Characters {
+  id              Int           @id @default(autoincrement())
+  name            String        @unique
+  level           Int
+  race_id         Int           @unique
+  Races           Races         @relation(fields: [race_id], references: [id])
+  subclass_id     Int           @unique
+  Subclasses      Subclasses    @relation(fields: [subclass_id], references: [id])
+  background_id   Int           @unique
+  Backgrounds     Backgrounds   @relation(fields: [background_id], references: [id])
+}
